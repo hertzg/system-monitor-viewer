@@ -1,4 +1,4 @@
 system-monitor-viewer
 =====================
 
-Viewer for aggregated data by system-monitor-node.
+Viewer for the aggregated data from system-monitor-node.
