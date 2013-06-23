@@ -34,7 +34,7 @@ try {
     process.exit(1)
 }
 
-compress('browse', [
+compress('view', [
     'javascript/FormatBytes.js',
     'javascript/FormatPercent.js',
     'javascript/Graph.js',

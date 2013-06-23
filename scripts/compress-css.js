@@ -22,9 +22,8 @@ try {
 }
 
 compress('view.compressed.css', [
-    'javascript/Button.css',
-    'common.css',
-    'album.css',
-    'icon24.css',
-    'icon64.css',
+    'javascript/Graph.css',
+    'javascript/Legend.css',
+    'index.css',
+    'view.css',
 ])
