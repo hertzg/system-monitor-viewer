@@ -1,21 +1,18 @@
-h1 {
-    font-weight: bold;
-    font-size: 26px;
-    line-height: 28px;
-    margin-top: 16px;
-    margin-bottom: 8px;
-    color: #333;
-}
-
-h2 {
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 22px;
-    margin-top: 16px;
-    margin-bottom: 4px;
-    color: #333;
-}
-
 b {
+    font-weight: bold;
+}
+
+.errorText {
+    padding: 32px;
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 26px;
+    color: #c83234;
+}
+
+.property {
+    margin: 8px;
+}
+.property > :first-child {
     font-weight: bold;
 }

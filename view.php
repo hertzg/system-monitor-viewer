@@ -1,22 +1,39 @@
 <?php
 
+function createRetryForm ($address, $hostHeader, $key) {
+    return
+        '<div>'
+            .'<form action="index.php" style="display: inline-block; vertical-align: top; margin-left: 16px;">'
+                .'<input class="button" type="submit" value="Retry" />'
+                .'<input type="hidden" name="address" value="'.htmlspecialchars($address).'" />'
+                .'<input type="hidden" name="hostHeader" value="'.htmlspecialchars($hostHeader).'" />'
+                .'<input type="hidden" name="key" value="'.htmlspecialchars($key).'" />'
+            .'</form>'
+        .'</div>';
+}
+
+//define('DEBUG', true);
+
 include_once 'fns/bytestr.php';
 include_once 'fns/request_strings.php';
 include_once 'lib/defaults.php';
 
 list($address, $hostHeader, $key) = request_strings('address', 'hostHeader', 'key');
 
-if ($address === '') $address = $defaults['address'];
-if ($hostHeader === '') $hostHeader = $defaults['hostHeader'];
+if ($address === '') $addressValue = $defaults['address'];
+else $addressValue = $address;
 
-$title = htmlspecialchars($address).' status';
+if ($hostHeader === '') $hostHeaderValue = $defaults['hostHeader'];
+else $hostHeaderValue = $hostHeader;
+
+$title = htmlspecialchars($addressValue).' status';
 
 $ch = curl_init();
 curl_setopt_array($ch, [
-    CURLOPT_URL => "http://$address/$key",
+    CURLOPT_URL => "http://$addressValue/$key",
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT => 10,
-    CURLOPT_HTTPHEADER => ["Host: $hostHeader"],
+    CURLOPT_HTTPHEADER => ["Host: $hostHeaderValue"],
 ]);
 $response = curl_exec($ch);
 if ($response) {
@@ -28,8 +45,8 @@ if ($response) {
         $totalmem = $data->totalmem;
         $usedmem = $totalmem - $data->freemem;
 
-        $totalmem = '<b>'.bytestr($totalmem)."</b> ($totalmem bytes)";
-        $usedmem = '<b>'.bytestr($usedmem)."</b> ($usedmem bytes)";
+        $totalmem = bytestr($totalmem)." ($totalmem bytes)";
+        $usedmem = bytestr($usedmem)." ($usedmem bytes)";
 
         $loadavg = $data->loadavg;
         $loadavg = number_format($loadavg[0], 2).', '.number_format($loadavg[1], 2).', '.number_format($loadavg[2], 2);
@@ -38,7 +55,7 @@ if ($response) {
         foreach ($data->freememHistory as $item) {
             $memory[] = [
                 'time' => $item->time,
-                'value' => ($data->totalmem - $item->value) / (1024 * 1024),
+                'value' => $data->totalmem - $item->value,
             ];
         }
 
@@ -46,7 +63,7 @@ if ($response) {
         foreach ($data->loadavgHistory as $item) {
             $processor[] = [
                 'time' => $item->time,
-                'value' => $item->value[0],
+                'value' => $item->value[0] / $data->numCpus,
             ];
         }
 
@@ -54,7 +71,7 @@ if ($response) {
         foreach ($data->networkHistory as $item) {
             $network[] = [
                 'time' => $item->time,
-                'value' => ($item->sent + $item->received) / 1024,
+                'value' => $item->sent + $item->received,
             ];
         }
 
@@ -65,39 +82,94 @@ if ($response) {
         ];
 
         $content =
-            '<div>'
-                .'<h2>General</h2>'
-                ."<div>Uptime: $uptime</div>"
-                ."<div>Load average: $loadavg</div>"
-                ."<div>Total memory: $totalmem</div>"
-                ."<div>Used memory: $usedmem</div>"
-                .'<h2>Memory</h2>'
-                .'<div id="memoryGraphWrapper"></div>'
-                .'<h2>Processor</h2>'
-                .'<div id="processorGraphWrapper"></div>'
-                .'<h2>Network</h2>'
-                .'<div id="networkGraphWrapper"></div>'
+            '<div style="text-align: left">'
+                .'<div style="display: inline-block; vertical-align: top">'
+                    .'<div class="item">'
+                        .'<div class="label">'
+                            .'<label>General</label>'
+                        .'</div>'
+                        .'<div class="field" style="width: 300px">'
+                            .'<div class="property">'
+                                .'<div>Uptime:</div>'
+                                ."<div>$uptime</div>"
+                            .'</div>'
+                            .'<div class="property">'
+                                .'<div>Load average:</div>'
+                                ."<div>$loadavg</div>"
+                            .'</div>'
+                            .'<div class="property">'
+                                .'<div>Total memory:</div>'
+                                ."<div>$totalmem</div>"
+                            .'</div>'
+                            .'<div class="property">'
+                                .'<div>Used memory:</div>'
+                                ."<div>$usedmem</div>"
+                            .'</div>'
+                        .'</div>'
+                    .'</div>'
+                .'</div>'
+                .'<div style="display: inline-block; vertical-align: top">'
+                    .'<div class="item">'
+                        .'<div class="label">'
+                            .'<label>Memory</label>'
+                        .'</div>'
+                        .'<div class="field" id="memoryGraphWrapper"></div>'
+                    .'</div>'
+                    .'<div class="item">'
+                        .'<div class="label">'
+                            .'<label>Processor</label>'
+                        .'</div>'
+                        .'<div class="field" id="processorGraphWrapper"></div>'
+                    .'</div>'
+                    .'<div class="item">'
+                        .'<div class="label">'
+                            .'<label>Network</label>'
+                        .'</div>'
+                        .'<div class="field" id="networkGraphWrapper"></div>'
+                    .'</div>'
+                .'</div>'
             .'</div>'
-            .'<script type="text/javascript" src="javascript/Graph.js?2"></script>'
-            .'<script>'
+            .'<script type="text/javascript">'
             .'var data = '.json_encode($clientData)."\n"
-            ."var dateNow = data.dateNow\n"
-            ."var memoryGraph = Graph(dateNow, data.memory)\n"
-            ."document.getElementById('memoryGraphWrapper').appendChild(memoryGraph.element)\n"
-            ."var processorGraph = Graph(dateNow, data.processor)\n"
-            ."document.getElementById('processorGraphWrapper').appendChild(processorGraph.element)\n"
-            ."var networkGraph = Graph(dateNow, data.network)\n"
-            ."document.getElementById('networkGraphWrapper').appendChild(networkGraph.element)\n"
             .'</script>';
 
+        if (defined('DEBUG')) {
+            $content .=
+                '<script type="text/javascript" src="javascript/FormatBytes.js"></script>'
+                .'<script type="text/javascript" src="javascript/FormatPercent.js"></script>'
+                .'<script type="text/javascript" src="javascript/Graph.js"></script>'
+                .'<script type="text/javascript" src="javascript/Legend.js"></script>'
+                .'<script type="text/javascript" src="javascript/MemoryGraph.js"></script>'
+                .'<script type="text/javascript" src="javascript/NetworkGraph.js"></script>'
+                .'<script type="text/javascript" src="javascript/ProcessorGraph.js"></script>'
+                .'<script type="text/javascript" src="view.js"></script>';
+        } else {
+            $content .=
+                '<script type="text/javascript" src="view.compressed.js"></script>';
+        }
+
     } else {
-        $content = 'The key is invalid.';
+        $content =
+            '<div class="errorText">The key is invalid.</div>'
+            .createRetryForm($address, $hostHeader, $key);
     }
 } else {
-    $content = curl_error($ch);
+    $content =
+        '<div class="errorText">'.curl_error($ch).'</div>'
+        .createRetryForm($address, $hostHeader, $key);
 }
 
 header('Content-Type: text/html; charset=UTF-8');
+
+if (defined('DEBUG')) {
+    $cssLinks =
+        '<link rel="stylesheet" type="text/css" href="javascript/Graph.css" />'
+        .'<link rel="stylesheet" type="text/css" href="javascript/Legend.css" />'
+        .'<link rel="stylesheet" type="text/css" href="index.css" />'
+        .'<link rel="stylesheet" type="text/css" href="view.css" />';
+} else {
+    $cssLinks = '<link rel="stylesheet" type="text/css" href="view.compressed.css" />';
+}
 
 echo
     '<!DOCTYPE html>'
@@ -105,11 +177,14 @@ echo
         .'<head>'
             ."<title>$title</title>"
             .'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
-            .'<link rel="stylesheet" type="text/css" href="index.css" />'
-            .'<link rel="stylesheet" type="text/css" href="view.css" />'
+            .'<link rel="icon" type="text/html" href="images/favicon.png" />'
+            .$cssLinks
         .'</head>'
         .'<body>'
-            ."<h1>$title</h1>"
-            .$content
+            .'<div style="display: inline-block; vertical-align: middle; height: 100%"></div>'
+            .'<div style="display: inline-block; vertical-align: middle">'
+                ."<h1>$title</h1>"
+                .$content
+            .'</div>'
         .'</body>'
     .'</html>';

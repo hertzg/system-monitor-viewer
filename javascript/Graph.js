@@ -1,22 +1,19 @@
 function Graph (lastTime, items) {
 
+    var classPrefix = 'Graph'
+
     items = items.slice()
 
     var canvas = document.createElement('canvas')
-    canvas.width = 300
+    canvas.className = classPrefix + '-canvas'
+    canvas.width = 400
     canvas.height = 100
-    canvas.style.background = '#fff'
-    canvas.style.verticalAlign = 'top'
-    canvas.style.border = '1px solid #ccc'
-    canvas.style.padding = '8px'
 
     var minuteScale = 2
 
     var element = document.createElement('div')
+    element.className = classPrefix
     element.appendChild(canvas)
-    element.style.position = 'relative'
-    element.style.display = 'inline-block'
-    element.style.background = '#eee'
 
     if (items.length) {
 
@@ -43,25 +40,6 @@ function Graph (lastTime, items) {
         })
         c.strokeStyle = '#07f'
         c.stroke()
-
-        var maxElement = document.createElement('div')
-        maxElement.appendChild(document.createTextNode('Max: ' + maxValue.toFixed(2)))
-
-        var minElement = document.createElement('div')
-        minElement.appendChild(document.createTextNode('Min: ' + minValue.toFixed(2)))
-
-        var legendElement = document.createElement('div')
-        legendElement.style.padding = '4px'
-        legendElement.style.fontSize = '12px'
-        legendElement.style.lineHeight = '14px'
-        legendElement.style.border = '1px solid #ccc'
-        legendElement.style.position = 'absolute'
-        legendElement.style.background = 'rgba(255, 255, 255, 0.8)'
-        legendElement.style.left = legendElement.style.bottom = '0'
-        legendElement.appendChild(maxElement)
-        legendElement.appendChild(minElement)
-
-        element.appendChild(legendElement)
 
     }
 

@@ -1,0 +1,11 @@
+.Graph {
+    position: relative;
+    display: inline-block;
+    background: #eee;
+}
+
+.Graph-canvas {
+    background: #fff;
+    vertical-align: top;
+    padding: 8px;
+}

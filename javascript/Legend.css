@@ -1,0 +1,13 @@
+.Legend {
+    padding: 4px;
+    font-size: 12px;
+    line-height: 14px;
+    border: 1px solid #ddd;
+    border-left: 0;
+    border-bottom: 0;
+    border-radius: 0 2px 0 0;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    left: 0;
+    bottom: 0;
+}
