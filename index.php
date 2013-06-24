@@ -1,11 +1,18 @@
 <?php
 
 include_once 'fns/request_strings.php';
+include_once 'lib/debug.php';
 include_once 'lib/defaults.php';
 
 list($address, $hostHeader, $key) = request_strings('address', 'hostHeader', 'key');
 
 header('Content-Type: text/html; charset=UTF-8');
+
+if (defined('DEBUG')) {
+    $cssLinks = '<link rel="stylesheet" type="text/css" href="index.css" />';
+} else {
+    $cssLinks = '<link rel="stylesheet" type="text/css" href="index.compressed.css" />';
+}
 
 echo
     '<!DOCTYPE html>'
@@ -14,7 +21,7 @@ echo
             .'<title>System Monitor Viewer</title>'
             .'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
             .'<link rel="icon" type="text/html" href="images/favicon.png" />'
-            .'<link rel="stylesheet" type="text/css" href="index.css" />'
+            .$cssLinks
         .'</head>'
         .'<body>'
             .'<div style="display: inline-block; vertical-align: middle; height: 100%"></div>'
@@ -46,8 +53,8 @@ echo
                             .'<label for="keyInput">Key:</label>'
                         .'</div>'
                         .'<div class="field">'
-                            .'<input id="keyInput" type="text" name="key"'
-                            .' value="'.htmlspecialchars($key).'" />'
+                            .'<input id="keyInput" type="text" required="required"'
+                            .' name="key" value="'.htmlspecialchars($key).'" />'
                         .'</div>'
                     .'</div>'
                     .'<div class="item" style="text-align: center;">'

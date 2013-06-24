@@ -12,10 +12,9 @@ function createRetryForm ($address, $hostHeader, $key) {
         .'</div>';
 }
 
-//define('DEBUG', true);
-
 include_once 'fns/bytestr.php';
 include_once 'fns/request_strings.php';
+include_once 'lib/debug.php';
 include_once 'lib/defaults.php';
 
 list($address, $hostHeader, $key) = request_strings('address', 'hostHeader', 'key');

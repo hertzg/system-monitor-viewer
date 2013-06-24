@@ -21,6 +21,10 @@ try {
     process.exit(1)
 }
 
+compress('index.compressed.css', [
+    'index.css',
+])
+
 compress('view.compressed.css', [
     'javascript/Graph.css',
     'javascript/Legend.css',

@@ -65,13 +65,16 @@ h1 {
 }
 
 .button {
-    border: 2px solid #27a474;
-    background: #37b484;
+    border: 2px solid #29f;
+    background: #eee;
     border-radius: 4px;
     padding: 0 8px;
-    color: #fff;
     cursor: pointer;
+    background-image: linear-gradient(#fff, #ddd);
+    box-shadow: 0 -2px 4px #ccc inset;
 }
 .button:active {
-    background-color: #27a474;
+    background-color: #ccc;
+    background-image: linear-gradient(#bbb, #ddd);
+    box-shadow: 0 2px 4px #aaa inset;
 }
