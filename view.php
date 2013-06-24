@@ -144,7 +144,7 @@ if ($response) {
                 .'<script type="text/javascript" src="view.js"></script>';
         } else {
             $content .=
-                '<script type="text/javascript" src="view.compressed.js"></script>';
+                '<script type="text/javascript" src="view.compressed.js?"></script>';
         }
 
     } else {
@@ -167,7 +167,7 @@ if (defined('DEBUG')) {
         .'<link rel="stylesheet" type="text/css" href="index.css" />'
         .'<link rel="stylesheet" type="text/css" href="view.css" />';
 } else {
-    $cssLinks = '<link rel="stylesheet" type="text/css" href="view.compressed.css" />';
+    $cssLinks = '<link rel="stylesheet" type="text/css" href="view.compressed.css?1" />';
 }
 
 echo

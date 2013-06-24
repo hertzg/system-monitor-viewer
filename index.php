@@ -11,7 +11,7 @@ header('Content-Type: text/html; charset=UTF-8');
 if (defined('DEBUG')) {
     $cssLinks = '<link rel="stylesheet" type="text/css" href="index.css" />';
 } else {
-    $cssLinks = '<link rel="stylesheet" type="text/css" href="index.compressed.css" />';
+    $cssLinks = '<link rel="stylesheet" type="text/css" href="index.compressed.css?1" />';
 }
 
 echo
