@@ -1,7 +1,10 @@
 .Graph {
     position: relative;
     display: inline-block;
-    background: #eee;
+    vertical-align: top;
+    background: #fff;
+    width: 416px;
+    height: 116px;
 }
 
 .Graph-canvas {

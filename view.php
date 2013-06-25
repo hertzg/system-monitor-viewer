@@ -167,7 +167,7 @@ if (defined('DEBUG')) {
         .'<link rel="stylesheet" type="text/css" href="index.css" />'
         .'<link rel="stylesheet" type="text/css" href="view.css" />';
 } else {
-    $cssLinks = '<link rel="stylesheet" type="text/css" href="view.compressed.css?1" />';
+    $cssLinks = '<link rel="stylesheet" type="text/css" href="view.compressed.css?2" />';
 }
 
 echo
