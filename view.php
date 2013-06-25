@@ -81,7 +81,7 @@ if ($response) {
         ];
 
         $content =
-            '<div style="text-align: left">'
+            '<div style="text-align: left; width: 788px; height: 496px">'
                 .'<div style="display: inline-block; vertical-align: top">'
                     .'<div class="item">'
                         .'<div class="label">'
@@ -105,6 +105,12 @@ if ($response) {
                                 ."<div>$usedmem</div>"
                             .'</div>'
                         .'</div>'
+                        .'<form action="view.php" style="padding: 16px; text-align: center">'
+                            .'<input class="button" type="submit" value="Reload" />'
+                            .'<input type="hidden" name="address" value="'.htmlspecialchars($address).'" />'
+                            .'<input type="hidden" name="hostHeader" value="'.htmlspecialchars($hostHeader).'" />'
+                            .'<input type="hidden" name="key" value="'.htmlspecialchars($key).'" />'
+                        .'</form>'
                     .'</div>'
                 .'</div>'
                 .'<div style="display: inline-block; vertical-align: top">'
